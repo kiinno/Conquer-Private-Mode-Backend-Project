@@ -23,7 +23,7 @@ const {
 } = require("../utils/validators/conver-validator");
 
 const {
-  storeItemValidationChain,
+  createStoreItemValidationChain,
 } = require("../utils/validators/store.validator");
 
 const storeRoute = express.Router();
@@ -35,7 +35,7 @@ storeRoute
     auth.isAuthenticated,
     auth.isAdmin,
     upload("image", "store", 400, 400),
-    toRequiredValidators(storeItemValidationChain),
+    toRequiredValidators(createStoreItemValidationChain()),
     validationResault,
     createDocument(StoreModel)
   );
@@ -59,7 +59,7 @@ storeRoute
     auth.isAdmin,
     ObjectIDParamValidator(StoreModel),
     upload("image", "store", 400, 400),
-    toOptionalValidators(storeItemValidationChain),
+    toOptionalValidators(createStoreItemValidationChain()),
     validationResault,
     updateDocument(StoreModel)
   );

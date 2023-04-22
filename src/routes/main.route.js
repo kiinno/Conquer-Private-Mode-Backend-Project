@@ -11,7 +11,7 @@ mainRouter.use("/user", userRouter);
 mainRouter.use("/feature", featuresRouter);
 mainRouter.use("/store", storeRouter);
 
-mainRouter.get("/whatsmyip", whatIsMyIp);
+mainRouter.get("/ip", whatIsMyIp);
 
 /**
  * Root Router

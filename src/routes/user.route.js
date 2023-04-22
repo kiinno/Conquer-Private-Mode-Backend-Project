@@ -15,8 +15,7 @@ const upload = require("../middlewares/upload.middleware");
 const { UserModel } = require("../models/user.model");
 const auth = require("../middlewares/auth.middleware");
 const {
-  userAccountValidation,
-  updateAccountValidation,
+  userAccountValidationChain,
 } = require("../utils/validators/user.validator");
 const userRouter = express.Router();
 const validationResault = require("../middlewares/validation-resault.middleware");
@@ -33,14 +32,14 @@ userRouter
   .get(auth.isAuthenticated, auth.isAdmin, getDocuments(UserModel))
   .post(
     upload("image", "profile_photo", 400, 400),
-    toRequiredValidators(userAccountValidation),
+    toRequiredValidators(userAccountValidationChain()),
     validationResault,
     createNewUser
   )
   .put(
     auth.isAuthenticated,
     upload("image", "profile_photo", 400, 400),
-    toOptionalValidators(updateAccountValidation),
+    toOptionalValidators(userAccountValidationChain(true)),
     validationResault,
     updateAuthenticatedUser
   );

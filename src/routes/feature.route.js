@@ -33,7 +33,7 @@ featureRoute
     auth.isAuthenticated,
     auth.isAdmin,
     upload("image", "feature", 400, 400),
-    toRequiredValidators(featureValidationChain),
+    toRequiredValidators(featureValidationChain()),
     validationResault,
     createDocument(FeatureModel)
   );
@@ -57,7 +57,7 @@ featureRoute
     auth.isAdmin,
     upload("image", "feature", 400, 400),
     ObjectIDParamValidator(FeatureModel),
-    toOptionalValidators(featureValidationChain),
+    toOptionalValidators(featureValidationChain()),
     validationResault,
     updateDocument(FeatureModel)
   );

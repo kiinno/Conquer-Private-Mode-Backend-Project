@@ -17,7 +17,7 @@ module.exports = asyncHandler(async (req, res) => {
     area: null,
   };
   res.status(200).json(
-    new Response({
+    new Response(200, {
       ip: remoteAddress,
       port: remotePort,
       family: remoteFamily,

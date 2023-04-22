@@ -38,12 +38,7 @@ if (app.get("env") === "development") {
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Auxalaries Middlewares
-app.use(
-  cors(),
-  express.urlencoded({ extended: true }),
-  jsonParser({ limit: "1kb" }),
-  helmet()
-);
+app.use(cors(), express.urlencoded({ extended: true }), jsonParser(), helmet());
 
 // Mounting Routes
 const mainRouter = require("./routes/main.route");

@@ -43,6 +43,7 @@ module.exports.getSpecificDocument = (Model) => {
  */
 module.exports.createDocument = (Model) => {
   return asyncHandler(async (req, res, next) => {
+    console.log(req.body);
     await Model.create(req.body);
     res.sendStatus(200);
   });
