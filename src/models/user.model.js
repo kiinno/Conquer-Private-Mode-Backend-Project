@@ -67,7 +67,7 @@ const schemaDefinition = {
   image: {
     type: String,
     trim: 1,
-    default: null,
+    default: "/uploads/profile_photo/default.png",
   },
   __v: { type: Number, select: 0 },
 };

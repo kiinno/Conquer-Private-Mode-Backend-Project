@@ -22,9 +22,7 @@ exports.isAdmin = asyncHandler(async (req, res, next) => {
 exports.isAuthenticated = asyncHandler(async (req, res, next) => {
   try {
     const token = req.get("Authentication");
-    console.log(token);
     const userID = jwt.verify(token, process.env.SECRET_KEY);
-
     if (mongoose.Types.ObjectId.isValid(userID.id)) {
       const userDoc = await UserModel.findById(userID.id);
       if (userDoc) {

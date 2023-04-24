@@ -1,28 +1,33 @@
 const express = require("express");
+const userRouter = express.Router();
+
+const auth = require("../middlewares/auth.middleware");
+const {
+  imageHandler,
+  multerParser,
+} = require("../middlewares/upload.middleware");
+const { UserModel } = require("../models/user.model");
+const validationResault = require("../middlewares/validation-resault.middleware");
+
 const {
   deleteSpecificDocument,
   getDocuments,
   getSpecificDocument,
   updateDocument,
 } = require("../controllers/global.controller");
+
 const {
   Login,
   verifyToken,
   createNewUser,
   updateAuthenticatedUser,
 } = require("../controllers/user.controller");
-const upload = require("../middlewares/upload.middleware");
-const { UserModel } = require("../models/user.model");
-const auth = require("../middlewares/auth.middleware");
+
 const {
-  userAccountValidationChain,
+  createUserValidationChain,
+  updateUserValidationChain,
 } = require("../utils/validators/user.validator");
-const userRouter = express.Router();
-const validationResault = require("../middlewares/validation-resault.middleware");
-const {
-  toOptionalValidators,
-  toRequiredValidators,
-} = require("../utils/validators/conver-validator");
+
 const {
   ObjectIDParamValidator,
 } = require("../utils/validators/global.validator");
@@ -31,16 +36,18 @@ userRouter
   .route("/")
   .get(auth.isAuthenticated, auth.isAdmin, getDocuments(UserModel))
   .post(
-    upload("image", "profile_photo", 400, 400),
-    toRequiredValidators(userAccountValidationChain()),
+    multerParser(),
+    createUserValidationChain,
     validationResault,
+    imageHandler("image", "profile_photo", 400, 400),
     createNewUser
   )
   .put(
     auth.isAuthenticated,
-    upload("image", "profile_photo", 400, 400),
-    toOptionalValidators(userAccountValidationChain(true)),
+    multerParser(),
+    updateUserValidationChain,
     validationResault,
+    imageHandler("image", "profile_photo", 400, 400),
     updateAuthenticatedUser
   );
 
@@ -63,7 +70,10 @@ userRouter
     auth.isAuthenticated,
     auth.isAdmin,
     ObjectIDParamValidator(UserModel),
-    upload("image", "cover", 400, 400),
+    multerParser(),
+    updateUserValidationChain,
+    validationResault,
+    imageHandler("image", "profile_photo", 400, 400),
     updateDocument
   );
 

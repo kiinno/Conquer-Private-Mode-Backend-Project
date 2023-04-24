@@ -10,7 +10,10 @@ const {
 
 const auth = require("../middlewares/auth.middleware");
 const { StoreModel } = require("../models/store.model");
-const upload = require("../middlewares/upload.middleware");
+const {
+  imageHandler,
+  multerParser,
+} = require("../middlewares/upload.middleware");
 const validationResault = require("../middlewares/validation-resault.middleware");
 
 const {
@@ -34,9 +37,10 @@ storeRoute
   .post(
     auth.isAuthenticated,
     auth.isAdmin,
-    upload("image", "store", 400, 400),
+    multerParser(),
     toRequiredValidators(createStoreItemValidationChain()),
     validationResault,
+    imageHandler("image", "store", 400, 400),
     createDocument(StoreModel)
   );
 
@@ -58,9 +62,10 @@ storeRoute
     auth.isAuthenticated,
     auth.isAdmin,
     ObjectIDParamValidator(StoreModel),
-    upload("image", "store", 400, 400),
+    multerParser(),
     toOptionalValidators(createStoreItemValidationChain()),
     validationResault,
+    imageHandler("image", "store", 400, 400),
     updateDocument(StoreModel)
   );
 

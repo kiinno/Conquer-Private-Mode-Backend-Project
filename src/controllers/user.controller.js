@@ -20,6 +20,7 @@ module.exports.verifyToken = asyncHandler(async (req, res, next) => {
 
 module.exports.createNewUser = asyncHandler(async (req, res, next) => {
   const body = req.body;
+  body.super = false;
   const user = await UserModel.create(body);
   res.status(200).json(
     new Response(200, {

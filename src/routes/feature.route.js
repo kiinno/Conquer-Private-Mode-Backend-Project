@@ -1,7 +1,10 @@
 const express = require("express");
 const featureRoute = express.Router();
 const { FeatureModel } = require("../models/feature.model");
-const upload = require("../middlewares/upload.middleware");
+const {
+  imageHandler,
+  multerParser,
+} = require("../middlewares/upload.middleware");
 const auth = require("../middlewares/auth.middleware");
 const validationResault = require("../middlewares/validation-resault.middleware");
 
@@ -32,9 +35,10 @@ featureRoute
   .post(
     auth.isAuthenticated,
     auth.isAdmin,
-    upload("image", "feature", 400, 400),
+    multerParser(),
     toRequiredValidators(featureValidationChain()),
     validationResault,
+    imageHandler("image", "feature", 400, 400),
     createDocument(FeatureModel)
   );
 
@@ -55,10 +59,11 @@ featureRoute
   .put(
     auth.isAuthenticated,
     auth.isAdmin,
-    upload("image", "feature", 400, 400),
+    multerParser(),
     ObjectIDParamValidator(FeatureModel),
     toOptionalValidators(featureValidationChain()),
     validationResault,
+    imageHandler("image", "feature", 400, 400),
     updateDocument(FeatureModel)
   );
 

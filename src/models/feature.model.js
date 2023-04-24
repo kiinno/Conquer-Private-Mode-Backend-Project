@@ -20,7 +20,7 @@ const featureSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: null,
+      default: "/uploads/feature/default.png",
       trim: 1,
     },
     __v: { type: Number, select: 0 },

@@ -20,7 +20,7 @@ const storeSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: null,
+      default: "/uploads/store/default.png",
       trim: 1,
     },
     price: {

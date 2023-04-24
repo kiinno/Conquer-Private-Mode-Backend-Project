@@ -20,6 +20,10 @@ const upload = multer({
   },
 });
 
+module.exports.multerParser = (fieldName = "image") => {
+  return upload.single(fieldName);
+};
+
 /**
  * Create Images Upload Handler
  * @param {*} fieldName
@@ -29,31 +33,26 @@ const upload = multer({
  * @param {*} dbFieldName
  * @returns HOF -> Middleware
  */
-module.exports = (
+module.exports.imageHandler = (
   fieldName,
   distFolder,
   width = 250,
   height = 250,
   dbFieldName
 ) => {
-  return [
-    upload.single(fieldName),
-    asyncHandler(async (req, res, next) => {
-      if (req.file) {
-        const fileName = `${Date.now()}-${Math.trunc(Math.random() * 1e7)}.png`;
-        const dest = path.join(__dirname, `../uploads/${distFolder}`, fileName);
-        await sharp(req.file.buffer)
-          .resize({
-            width,
-            height,
-          })
-          .png()
-          .toFile(dest);
-        req.body[
-          dbFieldName || fieldName
-        ] = `/uploads/${distFolder}/${fileName}`;
-      }
-      return next();
-    }),
-  ];
+  return asyncHandler(async (req, res, next) => {
+    if (req.file) {
+      const fileName = `${Date.now()}-${Math.trunc(Math.random() * 1e7)}.png`;
+      const dest = path.join(__dirname, `../uploads/${distFolder}`, fileName);
+      await sharp(req.file.buffer)
+        .resize({
+          width,
+          height,
+        })
+        .png()
+        .toFile(dest);
+      req.body[dbFieldName || fieldName] = `/uploads/${distFolder}/${fileName}`;
+    }
+    return next();
+  });
 };
